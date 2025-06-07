@@ -16,7 +16,7 @@ $(TARGET): $(OBJS)
 
 # Compilation rule
 %.o: %.cpp
-	$(CXX) -c $< -o $@
+	$(CXX) -g -c $< -o $@
 
 # Clean rule
 clean:

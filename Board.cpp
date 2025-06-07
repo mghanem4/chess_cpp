@@ -33,6 +33,12 @@ Ex: go thru each pawn in the first row:
     std::cout << "  a b c d e f g h\n";
 }
 
+std::shared_ptr<Piece> Board::getPiece(int row, int col) const {
+    if (row >= 0 && row < 8 && col >= 0 && col < 8)
+        return grid[row][col];
+    return nullptr;
+}
+
 bool Board::movePiece(int srcRow, int srcCol, int destRow, int destCol) {
     // avoids making unnecessary copies of objects and deduce object type
     auto& src = grid[srcRow][srcCol];
@@ -42,13 +48,13 @@ bool Board::movePiece(int srcRow, int srcCol, int destRow, int destCol) {
         std::cout << "Not your piece!\n";
         return false;
     }
-    if (src->isValidMove(srcRow, srcCol, destRow, destCol)) {
+    if (src->isValidMove(srcRow, srcCol, destRow, destCol, *this)) {
         grid[destRow][destCol] = src;
         src = nullptr;
         // switch turns
         if(colorTurn == Color::WHITE) colorTurn = Color::BLACK;
         else colorTurn = Color::WHITE;
-        
+
         return true;
     }
     return false;

@@ -1,6 +1,6 @@
 #pragma once
 #include "Piece.h"
-
+#include "Board.h"
 class Pawn : public Piece {
 public:
 // constructor, pawn color (W or B)
@@ -11,7 +11,7 @@ public:
         else return 'p';
     }
 
-    bool isValidMove(int srcRow, int srcCol, int destRow, int destCol) const override {
+    bool isValidMove(int srcRow, int srcCol, int destRow, int destCol, const Board& board) const override {
         int dir, start;
 
         bool isWhite = color == Color::WHITE;
@@ -27,13 +27,19 @@ public:
             // black pieces start on the bottom of array row 1
             start=1;
         }
-        if (srcCol == destCol && destRow == srcRow + dir) {
+        if (srcCol == destCol && destRow == srcRow + dir && !board.getPiece(destRow, destCol)) {
             return true;
         }
 
         // Double-step from initial position
-        if (srcCol == destCol && srcRow == start && destRow == srcRow + 2 * dir) {
+        if (srcCol == destCol && srcRow == start && destRow == srcRow + 2 * dir && !board.getPiece(destRow, destCol)) {
             return true;
+        }
+            // Diagonal capture
+        if (abs(destCol - srcCol) == 1 && destRow == srcRow + dir) {
+            auto target = board.getPiece(destRow, destCol);
+            if (target && target->getColor() != color)
+                return true;
         }
         return false;
     }

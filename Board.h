@@ -15,4 +15,6 @@ public:
     Board();
     void display() const;
     bool movePiece(int srcRow, int srcCol, int destRow, int destCol);
+    std::shared_ptr<Piece> getPiece(int row, int col) const;
+
 };
